@@ -2,12 +2,16 @@ import { useEffect, useRef, useState, useContext, useMemo } from "react";
 
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import {
-  useConnectionStatus,
-  useAddress,
-} from "@thirdweb-dev/react"; 
+import { useConnectionStatus, useAddress } from "@thirdweb-dev/react";
 import { NFTContext } from "../context/NFTContext";
-import { Banner, CreatorCard, Loader, RentCard, BuyCard, SearchBar } from "../components";
+import {
+  Banner,
+  CreatorCard,
+  Loader,
+  RentCard,
+  BuyCard,
+  SearchBar,
+} from "../components";
 
 import images from "../assets";
 import { shortenAddress } from "../utils/shortenAddress";
@@ -19,7 +23,8 @@ const Home = () => {
   // const [nfts, setNfts] = useState([]);
   // const [nftsCopy, setNftsCopy] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { fetchNFTs, isSigned, isSingedUp, isLoadingNFT } = useContext(NFTContext);
+  const { fetchNFTs, isSigned, isSingedUp, isLoadingNFT } =
+    useContext(NFTContext);
   const [activeSelect, setActiveSelect] = useState("Recently added");
   const parentRef = useRef(null);
   const scrollRef = useRef(null);
@@ -73,12 +78,13 @@ const Home = () => {
   }, [myListings, searchQueryListed, sortOptionListed]);
 
   useEffect(() => {
-    if (currentAccount) { // Ensure currentAccount is not null or undefined
+    if (currentAccount) {
+      // Ensure currentAccount is not null or undefined
       fetchNFTs().then((items) => {
         const itemsForRent = [];
         const itemsForSale = [];
         const myItem = [];
-  
+
         items.forEach((item) => {
           if (item.owner.toLowerCase() === currentAccount.toLowerCase()) {
             myItem.push(item);
@@ -112,7 +118,8 @@ const Home = () => {
         setRentNfts(itemsForRent);
         setSaleNfts(itemsForSale);
         setIsLoading(false);
-      })};
+      });
+    }
   }, [currentAccount ? currentAccount : ""]);
 
   const handleScroll = (direction) => {
@@ -200,21 +207,23 @@ const Home = () => {
             childStyles="md:text-4xl sm:text-2xl xs:text-xl text-left"
           />
 
-        {isLoadingNFT && (
-          <Modal
-            header="Loading NFTs..."
-            body={
-              <div className="flexCenter flex-col text-center">
-                <div className="relative w-52 h-52">
-                  <Loader />
-                </div>
-              </div>
-            }
-            handleClose={() => setPaymentModal(false)}
-          />
+          {isLoadingNFT && (
+            <div className="flex justify-center items-center">
+              <Modal
+                header="Loading NFTs..."
+                body={
+                  <div className="flex justify-center items-center flex-col text-center p-4">
+                    <div className="w-52 h-52 relative">
+                      <Loader />
+                    </div>
+                  </div>
+                }
+                handleClose={() => setPaymentModal(false)}
+              />
+            </div>
           )}
-            <>
-              {/* <div>
+          <>
+            {/* <div>
                   <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold ml-4 xs:ml-0">
                     Top Sellers
                   </h1>
@@ -270,8 +279,8 @@ const Home = () => {
                     </div>
                   </div>
                 </div> */}
-              <div className="mt-10">
-                {/* <div className="flexBetween mx-4 xs:mx-0 minlg:mx-8 sm:flex-col sm:items-start">
+            <div className="mt-10 flex flex-col items-center justify-center">
+              {/* <div className="flexBetween mx-4 xs:mx-0 minlg:mx-8 sm:flex-col sm:items-start">
                     <h1 className="flex-1 font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold sm:mb-4">
                       Hot NFTs for Rent
                     </h1>
@@ -284,11 +293,11 @@ const Home = () => {
                       />
                     </div>
                   </div> */}
-                {/* <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center"> */}
-                {/* {nfts.map((nft) => (
+              {/* <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center"> */}
+              {/* {nfts.map((nft) => (
                       <NFTCard key={nft.tokenId} nft={nft} />
                     ))} */}
-                {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+              {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                   <NFTCard
                     key={`nft-${i}`}
                     nft={{
@@ -302,102 +311,102 @@ const Home = () => {
                   />
                 ))} */}
 
-                {/* </div> */}
-                {myListings.length > 0 ? (
-                  <div className="mt-10 mb-10">
-                    <div className="flex items-center">
-                      <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold">
-                        My Listings
-                      </h1>
-                      <div
-                        className=""
-                        style={{ width: "700px", marginLeft: "100px" }}
-                      >
-                        {" "}
-                        {/* Adjust the width as needed */}
-                        {/* Search and Sort for Rent NFTs */}
-                        <SearchBar
-                          activeSelect={sortOptionRent}
-                          setActiveSelect={setSortOptionListed}
-                          handleSearch={(value) => setSearchQueryListed(value)}
-                          clearSearch={() => setSearchQueryListed("")}
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
-                      {filteredListedNfts.map(
-                        (nft) =>
-                          !nft.rented && <BuyCard key={nft.tokenId} nft={nft} />
-                      )}
+              {/* </div> */}
+              {myListings.length > 0 ? (
+                <div className="mt-10 mb-10">
+                  <div className="flex items-center">
+                    <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold">
+                      My Listings
+                    </h1>
+                    <div
+                      className=""
+                      style={{ width: "700px", marginLeft: "100px" }}
+                    >
+                      {" "}
+                      {/* Adjust the width as needed */}
+                      {/* Search and Sort for Rent NFTs */}
+                      <SearchBar
+                        activeSelect={sortOptionRent}
+                        setActiveSelect={setSortOptionListed}
+                        handleSearch={(value) => setSearchQueryListed(value)}
+                        clearSearch={() => setSearchQueryListed("")}
+                      />
                     </div>
                   </div>
-                ) : (
-                  <></>
-                )}
-                {rentNfts.length > 0 ? (
-                  <div className="mt-10 mb-10">
-                    <div className="flex items-center">
-                      <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold">
-                        NFTs for Rent
-                      </h1>
-                      <div
-                        className=""
-                        style={{ width: "700px", marginLeft: "100px" }}
-                      >
-                        {" "}
-                        {/* Adjust the width as needed */}
-                        {/* Search and Sort for Rent NFTs */}
-                        <SearchBar
-                          activeSelect={sortOptionRent}
-                          setActiveSelect={setSortOptionRent}
-                          handleSearch={(value) => setSearchQueryRent(value)}
-                          clearSearch={() => setSearchQueryRent("")}
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
-                      {filteredRentNfts.map(
-                        (nft) =>
-                          !nft.rented && <RentCard key={nft.tokenId} nft={nft} />
-                      )}
+                  <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
+                    {filteredListedNfts.map(
+                      (nft) =>
+                        !nft.rented && <BuyCard key={nft.tokenId} nft={nft} />
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+              {rentNfts.length > 0 ? (
+                <div className="mt-10 mb-10">
+                  <div className="flex items-center">
+                    <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold">
+                      NFTs for Rent
+                    </h1>
+                    <div
+                      className=""
+                      style={{ width: "700px", marginLeft: "100px" }}
+                    >
+                      {" "}
+                      {/* Adjust the width as needed */}
+                      {/* Search and Sort for Rent NFTs */}
+                      <SearchBar
+                        activeSelect={sortOptionRent}
+                        setActiveSelect={setSortOptionRent}
+                        handleSearch={(value) => setSearchQueryRent(value)}
+                        clearSearch={() => setSearchQueryRent("")}
+                      />
                     </div>
                   </div>
-                ) : (
-                  <></>
-                )}
-                {saleNfts.length > 0 ? (
-                  <div className="mt-10">
-                    <div className="flex items-center">
-                      <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold">
-                        NFTs for Sale
-                      </h1>
-                      <div
-                        className=""
-                        style={{ width: "700px", marginLeft: "100px" }}
-                      >
-                        {" "}
-                        {/* Adjust the width and margin as needed */}
-                        {/* Search and Sort for Sale NFTs */}
-                        <SearchBar
-                          activeSelect={sortOptionSale}
-                          setActiveSelect={setSortOptionSale}
-                          handleSearch={(value) => setSearchQuerySale(value)}
-                          clearSearch={() => setSearchQuerySale("")}
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
-                      {filteredSaleNfts.map(
-                        (nft) =>
-                          !nft.rented && <BuyCard key={nft.tokenId} nft={nft} />
-                      )}
+                  <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
+                    {filteredRentNfts.map(
+                      (nft) =>
+                        !nft.rented && <RentCard key={nft.tokenId} nft={nft} />
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+              {saleNfts.length > 0 ? (
+                <div className="mt-10">
+                  <div className="flex items-center">
+                    <h1 className="font-poppins dark:text-white text-nft-black-1 text-2xl minlg:text-4xl font-semibold">
+                      NFTs for Sale
+                    </h1>
+                    <div
+                      className=""
+                      style={{ width: "700px", marginLeft: "100px" }}
+                    >
+                      {" "}
+                      {/* Adjust the width and margin as needed */}
+                      {/* Search and Sort for Sale NFTs */}
+                      <SearchBar
+                        activeSelect={sortOptionSale}
+                        setActiveSelect={setSortOptionSale}
+                        handleSearch={(value) => setSearchQuerySale(value)}
+                        clearSearch={() => setSearchQuerySale("")}
+                      />
                     </div>
                   </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            </>
+                  <div className="mt-3 w-full flex flex-wrap justify-start md:justify-center">
+                    {filteredSaleNfts.map(
+                      (nft) =>
+                        !nft.rented && <BuyCard key={nft.tokenId} nft={nft} />
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          </>
         </div>
       </div>
     );

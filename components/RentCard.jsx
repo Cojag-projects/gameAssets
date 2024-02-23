@@ -8,7 +8,7 @@ import {
 } from "@thirdweb-dev/react"; 
 
 const RentCard = ({ nft, onProfilePage }) => {
-  const { nftCurrency } = useContext(NFTContext);
+  const { nftCurrency, userOf } = useContext(NFTContext);
   const ownerAddress = nft.owner.toLowerCase();
   const currentAccountAddress = useAddress();
   const [days, setDays] = useState(0);
@@ -46,8 +46,8 @@ const RentCard = ({ nft, onProfilePage }) => {
             <p className="mt-6 text-sm text-gray-100">ID: {nft.id}</p>
           </div>
           {(ownerAddress === currentAccountAddress && !nft.rented) ? (
-              <></>
-          ): (ownerAddress === currentAccountAddress && nft.rented) ? (
+              <>Your Asset is rented by somebody</>
+          ): (userOf(nft.tokenId) === currentAccountAddress && nft.rented) ? (
             <div className="flex gap-5 mt-4 text-center">
               <div className="flex flex-col">
                 <span className="countdown font-mono text-4xl">
